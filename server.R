@@ -7,10 +7,12 @@
 
 library(shiny)
 library(ggplot2)
+source('functions/triangle.geometry.R')
 
 shinyServer(function(input, output) {
   
   side.a <- reactive({
+    # cache side a from the ui
     validate(
       need(input$side.a, "Side A must be a number")
     )
@@ -19,6 +21,7 @@ shinyServer(function(input, output) {
   })
   
   side.b <- reactive({
+    # cache side b from the ui
     validate(
       need(input$side.b, "Side B must be a number")
     )
@@ -27,6 +30,7 @@ shinyServer(function(input, output) {
   })
   
   side.c <- reactive({
+    # cache side c from the ui
     validate(
       need(input$side.c, "Side C must be a number")
     )
@@ -35,15 +39,17 @@ shinyServer(function(input, output) {
   })
   
   output$triangle.info <- renderText({
-    ordered.vector <- sort(c(side.a(),side.b(),side.c()), decreasing = TRUE)
+    a <- side.a()
+    b <- side.b()
+    c <- side.c()
     
-    info.text <- if(!valid.triangle(side.a(),side.b(),side.c())) {
+    info.text <- if(!is.valid.triangle(a, b, c)) {
       "These side lengths are not a valid triangle. Make the short sides longer or the long side shorter."
-    } else if(ordered.vector[2]^2 + ordered.vector[3]^2 == ordered.vector[1]^2) {
+    } else if(is.right.triangle(a, b, c)) {
       "These side lengths produce a valid right triangle."
-    } else if(side.a() == side.b() & side.a() == side.c()) {
+    } else if(a == b & a == c) {
       "These side lengths produce an valid equilateral triangle."
-    } else if(side.a() == side.b() | side.a() == side.c() | side.c() == side.b()) {
+    } else if(a == b | a == c | c == b) {
       "These side lengths produce an valid isosceles triangle."
     } else {
       "These side lengths produce a valid triangle."
@@ -58,7 +64,7 @@ shinyServer(function(input, output) {
     c <- side.c()
     
     validate(
-      need(valid.triangle(a, b, c), "Cannot plot an invalid triangle.")
+      need(is.valid.triangle(a, b, c), "Cannot plot an invalid triangle.")
     )
     
     gamma <- law.of.cosines(a, b, c)
@@ -76,23 +82,3 @@ shinyServer(function(input, output) {
       geom_segment(aes(x=a, y=0, xend=a-side.c.xend, yend=side.c.yend), color="green", size=2) # side C
   })
 })
-
-valid.triangle <- function(a, b, c) {
-  side.vector <- c(a, b, c)
-  return(sum(side.vector) - max(side.vector) > max(side.vector))
-}
-
-law.of.cosines <- function(a, b, c) {
-  gamma <- acos((a^2 + b^2 - c^2)/(2*a*b))
-  return(gamma)
-}
-
-x.pos <- function(gamma, h) {
-  x <- h * sin(pi/2 - gamma)
-  return(x)
-}
-
-y.pos <- function(gamma, h) {
-  y <- h * sin(gamma)
-  return(y)
-}
