@@ -16,17 +16,17 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       numericInput(inputId = "side.a",
-                          label = "Side A Length:",
+                          label = "Side A Length (Black):",
                           value = 3,
                           min = 1,
                           step = 1),
       numericInput(inputId = "side.b",
-                          label = "Side B Length:",
+                          label = "Side B Length (Blue):",
                           value = 4,
                           min = 1,
                           step = 1),
       numericInput(inputId = "side.c",
-                          label = "Side C Length:",
+                          label = "Side C Length (Green):",
                           value = 5,
                           min = 1,
                           step = 1)
