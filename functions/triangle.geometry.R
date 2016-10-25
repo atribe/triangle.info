@@ -6,7 +6,7 @@ is.valid.triangle <- function(a, b, c) {
 
 is.right.triangle <- function(a, b, c) {
   # created a sorted vector, largest side (hypotenuse) will always be last element
-  ordered.vector <- sort(c(side.a(),side.b(),side.c()))
+  ordered.vector <- sort(c(a, b, c))
   
   # pathagorean theorem, if true right triangle
   # a^2 + b^2 == c^2?

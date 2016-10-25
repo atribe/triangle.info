@@ -79,6 +79,9 @@ shinyServer(function(input, output) {
     ggplot() +
       geom_segment(aes(x=0, y=0, xend=a, yend=0), size=2) + # side A
       geom_segment(aes(x=0, y=0, xend=side.b.xend, yend=side.b.yend), color="blue", size=2) + # side B
-      geom_segment(aes(x=a, y=0, xend=a-side.c.xend, yend=side.c.yend), color="green", size=2) # side C
+      geom_segment(aes(x=a, y=0, xend=a-side.c.xend, yend=side.c.yend), color="green", size=2) + # side C
+      theme_minimal() +
+      xlab("") +
+      ylab("")
   })
 })
